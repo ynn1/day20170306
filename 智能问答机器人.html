@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			#box{
+				width:800px;
+				height:900px;
+				border:solid 1px gray;
+				position:relative;
+				margin:20px auto;
+			}
+			.nav{
+				height:60px;
+				background:#ccc;
+			}
+			.contioner{
+				width:800px;
+				height:800px;
+				overflow:auto;
+				position:relative;
+				background:url("img/img02.jpg");
+			}
+			
+			.boss{
+				float:left;
+				color:#0000FF;
+				font-size:30px;
+				line-height:60px;
+			}
+			.anyone{
+				float:right;
+				color:#0000FF;
+				font-size:30px;
+				line-height:60px;
+			}
+			.txt{
+				width:800px;
+				height:100px;
+			}
+			/*.btn{
+				position:absolute;
+				right:0px;
+				bottom: 0;
+			}*/
+			ul,li{
+				list-style:none;
+			}
+			ul{
+				margin-bottom: 60px;
+			}
+			li{
+				margin-top:30px;
+				position:relative;
+			}
+			li{
+				border-radius:10px;
+				padding:5px;
+				position:absolute;
+				color:#fff;
+				font-size:25px;
+			}
+			p{
+				display:block;
+				margin-top:30px;
+			}
+			img{
+				position:absolute;
+				width:80px;
+				height:50px;
+				border-radius:100%;
+				border:solid 1px #ccc;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div class="nav"><span class="boss">机器人帮您解闷</span><span class="anyone">在线咨询</span></div>
+			<div class="contioner"></div>	
+			<textarea class="txt"></textarea>
+		<!--<input type="button" value="提交" class="btn"/>-->
+		</div>
+		
+	</body>
+	<script src="js/jquery-1.8.3.min.js"></script>
+	<script>
+		$(function(){
+			$.getJSON("json/JQperson.json",function(res){
+//				console.log(res);	
+//				$(".btn").click(function(){
+				$(".txt").blur(function(){
+					var otxt=$(".txt").val();
+					if(otxt==""){
+						alert("请输入内容再进行提问")
+					}else{
+						let htmlStr="<ul>";
+						htmlStr+="<img src='img/cat.gif' style='right:10px;width:50px'/>";
+						htmlStr+="<li style='right:60px;background:#0f0;margin-left:80px;'>"+otxt+"</li>";
+						$(".txt").val=" ";
+						htmlStr+="<br/><br/><br/><br/>";
+						var flag=0;
+						for(var i=0;i<res.length;i++){
+	//						console.log(res[i].question);
+	//						if(otxt==res[i].question){
+							if(otxt.indexOf(res[i].question)>-1){
+								var x=i;
+								flag++;
+								let htmlStr2="";
+								htmlStr2+="<img src='img/cat.gif' style='width:50px,left:10px'/>";
+								htmlStr2+="<li style='left:60px;background:#00f;margin-right:60px'>"+res[x].anser+"</li><br/>";
+								htmlStr+=htmlStr2;	
+								break;
+							}
+						}
+						if(flag==0){
+							let htmlStr3="";
+							htmlStr3+="<img src='img/img1.jpg' style='width:50px,left:10px'/>";
+							htmlStr3+="<li style='left:60px;background:#00f;margin-right:50px'>"+'亲，本机器人情商为负，建议您去找度娘解决'+"</li><br/>";
+							htmlStr+=htmlStr3;	
+							htmlStr+="<br/>";
+						}
+						$(".contioner").append(htmlStr);
+						$(".txt").val()=" ";
+					}
+				})
+			})
+		})
+	</script>
+</html>
